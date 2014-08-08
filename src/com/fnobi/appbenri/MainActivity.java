@@ -1,5 +1,6 @@
 package com.fnobi.appbenri;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v7.app.ActionBarActivity;
@@ -67,8 +68,16 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
             
+            List<AppActivityClient> clientList = new ArrayList<AppActivityClient>();
+            for (ResolveInfo ri : activityInfoList) {
+                String label = (String) ri.loadLabel(pm);
+                String packageName = ri.activityInfo.packageName;
+                String activityName = ri.activityInfo.name;
+                clientList.add(new AppActivityClient(label, packageName, activityName));
+            }
+            
             ListView listView = (ListView) rootView.findViewById(R.id.appbenri_listview);
-            AppListAdapter adapter = new AppListAdapter(activity, 0, activityInfoList);
+            AppListAdapter adapter = new AppListAdapter(activity, 0, clientList);
             listView.setAdapter(adapter);
             
             return rootView;

@@ -4,21 +4,17 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class AppListAdapter extends ArrayAdapter<ResolveInfo> {
+public class AppListAdapter extends ArrayAdapter<AppActivityClient> {
     private LayoutInflater mInflater;
-    private List<ResolveInfo> mItems;
+    private List<AppActivityClient> mItems;
     
-    public AppListAdapter(Context context, int viewResourceId, List<ResolveInfo> items) {
+    public AppListAdapter(Context context, int viewResourceId, List<AppActivityClient> items) {
         super(context, viewResourceId, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mItems = items;
@@ -30,29 +26,19 @@ public class AppListAdapter extends ArrayAdapter<ResolveInfo> {
             convertView = mInflater.inflate(R.layout.appbenri_layout_app_item, parent, false);
         }
         
-        ResolveInfo ri = mItems.get(position);
-        if (ri.activityInfo != null) {
-            // TODO: labelを毎度取得するのは無駄
-            final Context context = convertView.getContext();
-            PackageManager pm = context.getPackageManager();
-            String label = (String) ri.loadLabel(pm);
-            
-            final String packageName = ri.activityInfo.packageName;
-            final String activityName = ri.activityInfo.name;
-            
-            ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(label);
-            ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(packageName);
-            ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(activityName);
-            
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
-                    intent.setClassName(packageName, activityName);
-                    context.startActivity(intent);
-                }
-            });
-        }
+        final AppActivityClient ri = mItems.get(position);
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(ri.getLabel());
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(ri.getPackageName());
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(ri.getActivityName());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                intent.setClassName(ri.getPackageName(), ri.getActivityName());
+                v.getContext().startActivity(intent);
+            }
+        });
         
         return convertView;
     }
