@@ -15,19 +15,22 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class SearchAppActivityFragment extends Fragment {
-
+    
+    private List<AppActivityClient> mAppActivityList;
+    private ListView mListView;
+    
     public SearchAppActivityFragment() {
+        Activity activity = this.getActivity();
+        mAppActivityList = loadAppActivityList(activity);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.appbenri_fragment_main, container, false);
         
-        Activity activity = this.getActivity();
+        mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
         
-        ListView listView = (ListView) rootView.findViewById(R.id.appbenri_listview);
-        AppListAdapter adapter = new AppListAdapter(activity, 0, loadAppActivityList(activity));
-        listView.setAdapter(adapter);
+        updateListView();
         
         return rootView;
     }
@@ -46,6 +49,12 @@ public class SearchAppActivityFragment extends Fragment {
         }
         
         return clientList;
+    }
+    
+    private void updateListView() {
+        Activity activity = this.getActivity();
+        AppListAdapter adapter = new AppListAdapter(activity, 0, mAppActivityList);
+        mListView.setAdapter(adapter);
     }
 
 }
