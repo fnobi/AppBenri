@@ -3,7 +3,6 @@ package com.fnobi.appbenri;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +33,7 @@ public class AppListAdapter extends ArrayAdapter<AppActivityClient> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN, null);
-                intent.setClassName(ri.getPackageName(), ri.getActivityName());
-                v.getContext().startActivity(intent);
+                ri.startActivity(v.getContext());
             }
         });
         
