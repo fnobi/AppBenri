@@ -3,7 +3,10 @@ package com.fnobi.appbenri;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +32,26 @@ public class AppListAdapter extends ArrayAdapter<ResolveInfo> {
         
         ResolveInfo ri = mItems.get(position);
         if (ri.activityInfo != null) {
-            ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(ri.activityInfo.packageName);
-            ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(ri.activityInfo.name);
+            // TODO: labelを毎度取得するのは無駄
+            final Context context = convertView.getContext();
+            PackageManager pm = context.getPackageManager();
+            String label = (String) ri.loadLabel(pm);
+            
+            final String packageName = ri.activityInfo.packageName;
+            final String activityName = ri.activityInfo.name;
+            
+            ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(label);
+            ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(packageName);
+            ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(activityName);
+            
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.setClassName(packageName, activityName);
+                    context.startActivity(intent);
+                }
+            });
         }
         
         return convertView;
