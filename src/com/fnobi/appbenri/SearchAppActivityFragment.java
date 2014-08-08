@@ -24,6 +24,15 @@ public class SearchAppActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.appbenri_fragment_main, container, false);
         
         Activity activity = this.getActivity();
+        
+        ListView listView = (ListView) rootView.findViewById(R.id.appbenri_listview);
+        AppListAdapter adapter = new AppListAdapter(activity, 0, loadAppActivityList(activity));
+        listView.setAdapter(adapter);
+        
+        return rootView;
+    }
+    
+    private List<AppActivityClient> loadAppActivityList(Activity activity) {
         PackageManager pm = activity.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
@@ -36,11 +45,7 @@ public class SearchAppActivityFragment extends Fragment {
             clientList.add(new AppActivityClient(label, packageName, activityName));
         }
         
-        ListView listView = (ListView) rootView.findViewById(R.id.appbenri_listview);
-        AppListAdapter adapter = new AppListAdapter(activity, 0, clientList);
-        listView.setAdapter(adapter);
-        
-        return rootView;
+        return clientList;
     }
 
 }
