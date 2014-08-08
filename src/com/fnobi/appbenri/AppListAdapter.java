@@ -25,15 +25,15 @@ public class AppListAdapter extends ArrayAdapter<AppActivityClient> {
             convertView = mInflater.inflate(R.layout.appbenri_layout_app_item, parent, false);
         }
         
-        final AppActivityClient ri = mItems.get(position);
-        ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(ri.getLabel());
-        ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(ri.getPackageName());
-        ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(ri.getActivityName());
+        final AppActivityClient client = mItems.get(position);
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(client.getLabel());
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(client.getPackageName());
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(client.getActivityName());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ri.startActivity(v.getContext());
+                client.startActivity(v.getContext());
             }
         });
         
