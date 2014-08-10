@@ -32,7 +32,6 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
         
         setupEditText();
-        
         setupListView();
         
         return rootView;
@@ -80,7 +79,7 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
     }
     
     private void initAppList() {
-        filterAppList("");
+        filterAppList(mEditText.getText().toString());
     }
     
     private void filterAppList(String searchText) {
