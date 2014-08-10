@@ -2,16 +2,17 @@ package com.fnobi.appbenri;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 
 public class AppActivityModel {
     final private String mLabel;
     final private String mPackageName;
     final private String mActivityName;
     
-    public AppActivityModel(String label, String packageName, String activityName) {
+    public AppActivityModel(String label, ResolveInfo ri) {
         mLabel = label;
-        mPackageName = packageName;
-        mActivityName = activityName;
+        mPackageName = ri.activityInfo.packageName;
+        mActivityName = ri.activityInfo.name;
     }
     
     public String getLabel() {

@@ -61,9 +61,7 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
         for (ResolveInfo ri : activityInfoList) {
             String label = (String) ri.loadLabel(pm);
-            String packageName = ri.activityInfo.packageName;
-            String activityName = ri.activityInfo.name;
-            modelList.add(new AppActivityModel(label, packageName, activityName));
+            modelList.add(new AppActivityModel(label, ri));
         }
         
         return modelList;
