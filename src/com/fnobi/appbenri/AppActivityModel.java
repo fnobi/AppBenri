@@ -3,12 +3,12 @@ package com.fnobi.appbenri;
 import android.content.Context;
 import android.content.Intent;
 
-public class AppActivityClient {
+public class AppActivityModel {
     final private String mLabel;
     final private String mPackageName;
     final private String mActivityName;
     
-    public AppActivityClient(String label, String packageName, String activityName) {
+    public AppActivityModel(String label, String packageName, String activityName) {
         mLabel = label;
         mPackageName = packageName;
         mActivityName = activityName;

@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 public class SearchAppActivityFragment extends Fragment {
     
-    private List<AppActivityClient> mAppActivityList;
+    private List<AppActivityModel> mAppActivityList;
     private ListView mListView;
     
     public SearchAppActivityFragment() {
@@ -26,7 +26,7 @@ public class SearchAppActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.appbenri_fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.appbenri_fragment_search_app_activity, container, false);
         
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
         
@@ -35,20 +35,20 @@ public class SearchAppActivityFragment extends Fragment {
         return rootView;
     }
     
-    private List<AppActivityClient> loadAppActivityList(Activity activity) {
+    private List<AppActivityModel> loadAppActivityList(Activity activity) {
         PackageManager pm = activity.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
         
-        List<AppActivityClient> clientList = new ArrayList<AppActivityClient>();
+        List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
         for (ResolveInfo ri : activityInfoList) {
             String label = (String) ri.loadLabel(pm);
             String packageName = ri.activityInfo.packageName;
             String activityName = ri.activityInfo.name;
-            clientList.add(new AppActivityClient(label, packageName, activityName));
+            modelList.add(new AppActivityModel(label, packageName, activityName));
         }
         
-        return clientList;
+        return modelList;
     }
     
     private void updateListView() {

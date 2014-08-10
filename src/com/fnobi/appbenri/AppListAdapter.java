@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class AppListAdapter extends ArrayAdapter<AppActivityClient> {
+public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
     private LayoutInflater mInflater;
-    private List<AppActivityClient> mItems;
+    private List<AppActivityModel> mItems;
     
-    public AppListAdapter(Context context, int viewResourceId, List<AppActivityClient> items) {
+    public AppListAdapter(Context context, int viewResourceId, List<AppActivityModel> items) {
         super(context, viewResourceId, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mItems = items;
@@ -22,10 +22,10 @@ public class AppListAdapter extends ArrayAdapter<AppActivityClient> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.appbenri_layout_app_item, parent, false);
+            convertView = mInflater.inflate(R.layout.appbenri_item_app_activity, parent, false);
         }
         
-        final AppActivityClient client = mItems.get(position);
+        final AppActivityModel client = mItems.get(position);
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(client.getLabel());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(client.getPackageName());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(client.getActivityName());
