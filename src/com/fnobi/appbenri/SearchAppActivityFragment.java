@@ -9,26 +9,47 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 
-public class SearchAppActivityFragment extends Fragment {
+public class SearchAppActivityFragment extends Fragment implements TextWatcher {
     
     private List<AppActivityModel> mAppActivityList;
     private ListView mListView;
+    private EditText mEditText; 
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.appbenri_fragment_search_app_activity, container, false);
         
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
-        mAppActivityList = loadAppActivityList();
+        mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
         
-        updateListView();
+        setupEditText();
+        
+        setupListView();
         
         return rootView;
+    }
+    
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        filterAppList(s.toString());
+    }
+    
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // do nothing
+    }
+    
+    @Override
+    public void afterTextChanged(Editable s) {
+        // do nothing
     }
     
     private List<AppActivityModel> loadAppActivityList() {
@@ -48,10 +69,34 @@ public class SearchAppActivityFragment extends Fragment {
         return modelList;
     }
     
-    private void updateListView() {
-        Activity activity = this.getActivity();
-        AppListAdapter adapter = new AppListAdapter(activity, 0, mAppActivityList);
-        mListView.setAdapter(adapter);
+    private void setupListView() {
+        mAppActivityList = loadAppActivityList();
+        initAppList();
     }
 
+    private void setupEditText() {
+        assert(mEditText != null);
+        mEditText.addTextChangedListener(this);
+    }
+    
+    private void initAppList() {
+        filterAppList("");
+    }
+    
+    private void filterAppList(String searchText) {
+        if (mAppActivityList == null) {
+            return;
+        }
+        
+        List<AppActivityModel> list = new ArrayList<AppActivityModel>();
+        for (AppActivityModel model : mAppActivityList) {
+            if (model.getPackageName().indexOf(searchText) == 0) {
+                list.add(model);
+            }
+        }
+        
+        Activity activity = this.getActivity();
+        AppListAdapter adapter = new AppListAdapter(activity, 0, list);
+        mListView.setAdapter(adapter);
+    }
 }

@@ -4,5 +4,6 @@
     <string name="app_name">AppBenri</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="appbenri_app_package_name">app package name</string>
 
 </resources>
