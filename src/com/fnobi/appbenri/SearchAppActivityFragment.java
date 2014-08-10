@@ -19,23 +19,20 @@ public class SearchAppActivityFragment extends Fragment {
     private List<AppActivityModel> mAppActivityList;
     private ListView mListView;
     
-    public SearchAppActivityFragment() {
-        Activity activity = this.getActivity();
-        mAppActivityList = loadAppActivityList(activity);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.appbenri_fragment_search_app_activity, container, false);
         
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
+        mAppActivityList = loadAppActivityList();
         
         updateListView();
         
         return rootView;
     }
     
-    private List<AppActivityModel> loadAppActivityList(Activity activity) {
+    private List<AppActivityModel> loadAppActivityList() {
+        Activity activity = this.getActivity();
         PackageManager pm = activity.getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
