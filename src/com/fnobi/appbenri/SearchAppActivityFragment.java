@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -61,7 +62,8 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
         for (ResolveInfo ri : activityInfoList) {
             String label = (String) ri.loadLabel(pm);
-            modelList.add(new AppActivityModel(label, ri));
+            Drawable icon = ri.loadIcon(pm);
+            modelList.add(new AppActivityModel(label, icon, ri));
         }
         
         return modelList;
