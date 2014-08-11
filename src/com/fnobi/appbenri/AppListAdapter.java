@@ -28,14 +28,22 @@ public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
         
         final AppActivityModel client = mItems.get(position);
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(client.getLabel());
-        ((ImageView) convertView.findViewById(R.id.appbenri_imageview_app_icon)).setImageDrawable(client.getIcon());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(client.getPackageName());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(client.getActivityName());
-
+        
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.appbenri_imageview_app_icon);
+        imageView.setImageDrawable(client.getIcon());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                client.openActivity(v.getContext());
+            }
+        });
+        
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                client.startActivity(v.getContext());
+                client.openAppDetail(v.getContext());
             }
         });
         
