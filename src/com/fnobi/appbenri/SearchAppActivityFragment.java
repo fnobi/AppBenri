@@ -32,9 +32,15 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
         
         setupEditText();
-        setupListView();
         
         return rootView;
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        setupListView();
     }
     
     @Override
