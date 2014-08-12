@@ -30,6 +30,7 @@ public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(client.getLabel());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(client.getPackageName());
         ((TextView) convertView.findViewById(R.id.appbenri_text_app_activity)).setText(client.getActivityName());
+        ((TextView) convertView.findViewById(R.id.appbenri_text_app_install_date)).setText(client.getFirstInstallTime().toString());
         
         ImageView imageView = (ImageView) convertView.findViewById(R.id.appbenri_imageview_app_icon);
         imageView.setImageDrawable(client.getIcon());
