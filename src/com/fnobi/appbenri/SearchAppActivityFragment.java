@@ -1,6 +1,8 @@
 package com.fnobi.appbenri;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -98,6 +100,13 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher, 
             
             modelList.add(new AppActivityModel(label, icon, ri, pi));
         }
+        
+        Collections.sort(modelList, new Comparator<AppActivityModel>() {
+            @Override
+            public int compare(AppActivityModel model1, AppActivityModel model2) {
+                return -model1.getFirstInstallTime().compareTo(model2.getFirstInstallTime());
+            }
+        });
         
         return modelList;
     }
