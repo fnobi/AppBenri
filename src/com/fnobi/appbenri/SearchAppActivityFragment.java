@@ -5,8 +5,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +32,6 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
         mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
-        
         setupEditText();
         
         return rootView;
@@ -67,8 +68,18 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
         for (ResolveInfo ri : activityInfoList) {
             String label = (String) ri.loadLabel(pm);
+            String packageName = ri.activityInfo.packageName;
             Drawable icon = ri.loadIcon(pm);
-            modelList.add(new AppActivityModel(label, icon, ri));
+            
+            PackageInfo pi = null;
+            try {
+                pi = pm.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            } catch (NameNotFoundException e) { /* do nothing */ }
+            if (pi == null) {
+                continue;
+            }
+            
+            modelList.add(new AppActivityModel(label, icon, ri, pi));
         }
         
         return modelList;

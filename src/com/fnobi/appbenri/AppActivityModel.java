@@ -1,7 +1,10 @@
 package com.fnobi.appbenri;
 
+import java.util.Date;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -11,12 +14,14 @@ public class AppActivityModel {
     final private Drawable mIcon;
     final private String mPackageName;
     final private String mActivityName;
+    final private Date mFirstInstallTime;
     
-    public AppActivityModel(String label, Drawable icon, ResolveInfo ri) {
+    public AppActivityModel(String label, Drawable icon, ResolveInfo ri, PackageInfo pi) {
         mLabel = label;
         mIcon = icon;
         mPackageName = ri.activityInfo.packageName;
         mActivityName = ri.activityInfo.name;
+        mFirstInstallTime = new Date(pi.firstInstallTime);
     }
     
     public String getLabel() {
@@ -33,6 +38,10 @@ public class AppActivityModel {
     
     public String getActivityName() {
         return mActivityName;
+    }
+    
+    public Date getFirstInstallTime() {
+        return mFirstInstallTime;
     }
     
     public void openActivity(Context context) {
