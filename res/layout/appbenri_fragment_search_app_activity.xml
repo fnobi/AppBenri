@@ -25,9 +25,10 @@
             android:orientation="horizontal" >
 
             <CheckBox
+                android:id="@+id/appbenri_check_app_package_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true" />
+                android:checked="false" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,6 +36,7 @@
                 android:text="@string/appbenri_app_package_name" />
 
             <CheckBox
+                android:id="@+id/appbenri_check_app_install_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/appbenri_default_margin"

@@ -14,17 +14,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class SearchAppActivityFragment extends Fragment implements TextWatcher {
+public class SearchAppActivityFragment extends Fragment implements TextWatcher, OnCheckedChangeListener {
     
     private List<AppActivityModel> mAppActivityList;
     private ListView mListView;
-    private EditText mEditText; 
+    private EditText mEditText;
+    private SparseBooleanArray mVisiblityFlags;
+    private AppListAdapter mAdapter; 
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +39,8 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
         mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
         setupEditText();
+        
+        setupCheckBoxes(rootView);
         
         return rootView;
     }
@@ -57,6 +65,15 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         // do nothing
+    }
+    
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mVisiblityFlags.put(buttonView.getId(), isChecked);
+        if (mAdapter != null) {
+            mAdapter.setVisibilityFlags(mVisiblityFlags);
+            mAdapter.notifyDataSetChanged();
+        }
     }
     
     private List<AppActivityModel> loadAppActivityList() {
@@ -95,6 +112,20 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         mEditText.addTextChangedListener(this);
     }
     
+    private void setupCheckBoxes(View rootView) {
+        mVisiblityFlags = new SparseBooleanArray();
+        int[] ids = {
+            R.id.appbenri_check_app_install_date,
+            R.id.appbenri_check_app_package_name
+        };
+        for (final int id : ids) {
+            CheckBox checkBox = (CheckBox) rootView.findViewById(id);
+            checkBox.setOnCheckedChangeListener(this);
+            
+            mVisiblityFlags.put(id, false);
+        }
+    }
+    
     private void initAppList() {
         filterAppList(mEditText.getText().toString());
     }
@@ -112,7 +143,7 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher {
         }
         
         Activity activity = this.getActivity();
-        AppListAdapter adapter = new AppListAdapter(activity, 0, list);
-        mListView.setAdapter(adapter);
+        mAdapter = new AppListAdapter(activity, 0, list);
+        mListView.setAdapter(mAdapter);
     }
 }
