@@ -3,7 +3,8 @@
     android:id="@+id/appbenri_listitem"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:padding="@dimen/appbenri_default_margin" >
 
     <ImageView
         android:id="@+id/appbenri_imageview_app_icon"

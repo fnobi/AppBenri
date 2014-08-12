@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="appbenri_app_package_name">app package name</string>
     <string name="appbenri_icon_image">icon image</string>
+    <string name="appbenri_install_date">install date</string>
 
 </resources>
