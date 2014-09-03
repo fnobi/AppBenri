@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,6 +55,15 @@ public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
             @Override
             public void onClick(View v) {
                 client.openActivity(v.getContext());
+            }
+        });
+        
+        Button storeButton = (Button) convertView.findViewById(R.id.appbenri_button_store);
+        storeButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                client.openStore(v.getContext());
             }
         });
         

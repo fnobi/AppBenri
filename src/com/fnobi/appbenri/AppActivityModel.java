@@ -55,4 +55,13 @@ public class AppActivityModel {
         intent.setData(Uri.parse("package:" + mPackageName));
         context.startActivity(intent);        
     }
+    
+    public void openStore(Context context) {
+        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+        }        
+    }
 }
