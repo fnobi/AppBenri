@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">AppBenri</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="appbenri_activity_package_name">activity name</string>
     <string name="appbenri_app_package_name">app package name</string>
     <string name="appbenri_icon_image">icon image</string>
     <string name="appbenri_install_date">install date</string>

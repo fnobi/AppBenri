@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/appbenri_app_package_name" />
+                android:text="@string/appbenri_activity_package_name" />
 
             <CheckBox
                 android:id="@+id/appbenri_check_app_install_date"
