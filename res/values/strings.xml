@@ -7,5 +7,6 @@
     <string name="appbenri_app_package_name">app package name</string>
     <string name="appbenri_icon_image">icon image</string>
     <string name="appbenri_install_date">install date</string>
+    <string name="appbenri_store">store</string>
 
 </resources>

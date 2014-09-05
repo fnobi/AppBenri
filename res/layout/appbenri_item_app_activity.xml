@@ -13,15 +13,11 @@
         android:layout_marginRight="@dimen/appbenri_default_margin"
         android:contentDescription="@string/appbenri_icon_image" />
 
-    <Button
-        android:id="@+id/appbenri_button_store"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="store" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="@dimen/appbenri_default_margin"
         android:orientation="vertical" >
 
         <TextView
@@ -44,5 +40,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/appbenri_button_store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/appbenri_store"
+        android:src="@drawable/abc_ic_cab_done_holo_light" />
 
 </LinearLayout>
