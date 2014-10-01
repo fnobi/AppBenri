@@ -131,7 +131,7 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher, 
             CheckBox checkBox = (CheckBox) rootView.findViewById(id);
             checkBox.setOnCheckedChangeListener(this);
             
-            mVisiblityFlags.put(id, false);
+            mVisiblityFlags.put(id, checkBox.isChecked());
         }
     }
     
