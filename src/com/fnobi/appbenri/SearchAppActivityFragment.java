@@ -6,82 +6,141 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
-public class SearchAppActivityFragment extends Fragment implements TextWatcher, OnCheckedChangeListener {
+public class SearchAppActivityFragment extends Fragment implements OnItemSelectedListener {
+    
+    private static String[] sActionList = {
+            Intent.ACTION_MAIN,
+            Intent.ACTION_VIEW,
+            Intent.ACTION_GET_CONTENT
+    };
     
     private List<AppActivityModel> mAppActivityList;
     private ListView mListView;
-    private EditText mEditText;
-    private SparseBooleanArray mVisiblityFlags;
-    private AppListAdapter mAdapter; 
+    private Spinner mSpinner;
+    private String mActionFilter;
+    private AppListAdapter mAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.appbenri_fragment_search_app_activity, container, false);
         
         mListView = (ListView) rootView.findViewById(R.id.appbenri_listview);
-        mEditText = (EditText) rootView.findViewById(R.id.appbenri_edittext_app_search);
-        setupEditText();
+        mSpinner = (Spinner) rootView.findViewById(R.id.appbenri_spinner_app_activity_search);
         
-        setupCheckBoxes(rootView);
+        setupSpinner();
         
         return rootView;
     }
     
     @Override
-    public void onResume() {
-        super.onResume();
-        
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mActionFilter = sActionList[position];
         setupListView();
     }
-    
+
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        filterAppList(s.toString());
+    public void onNothingSelected(AdapterView<?> parent) {
+        
+    }
+
+    private void setupSpinner() {
+        
+        mSpinner.setAdapter(new SpinnerAdapter() {
+            
+            @Override
+            public void unregisterDataSetObserver(DataSetObserver observer) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public void registerDataSetObserver(DataSetObserver observer) {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            @Override
+            public boolean isEmpty() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+            
+            @Override
+            public boolean hasStableIds() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+            
+            @Override
+            public int getViewTypeCount() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+            
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Context context = parent.getContext();
+                String label = (String) getItem(position);
+                TextView textView = new TextView(context);
+                textView.setText(label);
+                return textView;
+            }
+            
+            @Override
+            public int getItemViewType(int position) {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+            
+            @Override
+            public long getItemId(int position) {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+            
+            @Override
+            public Object getItem(int position) {
+                return sActionList[position];
+            }
+            
+            @Override
+            public int getCount() {
+                return sActionList.length;
+            }
+            
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                return getView(position, convertView, parent);
+            }
+        });
+        
+        mSpinner.setOnItemSelectedListener(this);
     }
     
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // do nothing
-    }
-    
-    @Override
-    public void afterTextChanged(Editable s) {
-        // do nothing
-    }
-    
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mVisiblityFlags.put(buttonView.getId(), isChecked);
-        if (mAdapter != null) {
-            mAdapter.setVisibilityFlags(mVisiblityFlags);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-    
-    private List<AppActivityModel> loadAppActivityList() {
+    private List<AppActivityModel> loadAppActivityList(String action) {
         Activity activity = this.getActivity();
         PackageManager pm = activity.getPackageManager();
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        Intent intent = new Intent(action, null);
         List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
         
         List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
@@ -112,31 +171,15 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher, 
     }
     
     private void setupListView() {
-        mAppActivityList = loadAppActivityList();
+        if (mActionFilter == null) {
+            return;
+        }
+        mAppActivityList = loadAppActivityList(mActionFilter);
         initAppList();
     }
 
-    private void setupEditText() {
-        assert(mEditText != null);
-        mEditText.addTextChangedListener(this);
-    }
-    
-    private void setupCheckBoxes(View rootView) {
-        mVisiblityFlags = new SparseBooleanArray();
-        int[] ids = {
-            R.id.appbenri_check_app_install_date,
-            R.id.appbenri_check_app_package_name
-        };
-        for (final int id : ids) {
-            CheckBox checkBox = (CheckBox) rootView.findViewById(id);
-            checkBox.setOnCheckedChangeListener(this);
-            
-            mVisiblityFlags.put(id, checkBox.isChecked());
-        }
-    }
-    
     private void initAppList() {
-        filterAppList(mEditText.getText().toString());
+        filterAppList(null);
     }
     
     private void filterAppList(String searchText) {
@@ -144,11 +187,16 @@ public class SearchAppActivityFragment extends Fragment implements TextWatcher, 
             return;
         }
         
-        List<AppActivityModel> list = new ArrayList<AppActivityModel>();
-        for (AppActivityModel model : mAppActivityList) {
-            if (model.getPackageName().indexOf(searchText) == 0) {
-                list.add(model);
+        List<AppActivityModel> list;
+        if (searchText != null) {
+            list = new ArrayList<AppActivityModel>();
+            for (AppActivityModel model : mAppActivityList) {
+                if (model.getPackageName().indexOf(searchText) == 0) {
+                    list.add(model);
+                }
             }
+        } else {
+            list = mAppActivityList;
         }
         
         Activity activity = this.getActivity();

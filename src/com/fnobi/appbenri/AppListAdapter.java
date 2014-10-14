@@ -3,7 +3,6 @@ package com.fnobi.appbenri;
 import java.util.List;
 
 import android.content.Context;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
     private LayoutInflater mInflater;
     private List<AppActivityModel> mItems;
-    private SparseBooleanArray mVisibilityFlags;
     
     public AppListAdapter(Context context, int viewResourceId, List<AppActivityModel> items) {
         super(context, viewResourceId, items);
@@ -29,24 +27,22 @@ public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
         }
         
         final AppActivityModel client = mItems.get(position);
-        ((TextView) convertView.findViewById(R.id.appbenri_text_app_label)).setText(client.getLabel());
-        ((TextView) convertView.findViewById(R.id.appbenri_text_app_package)).setText(client.getPackageName());
+        
+        TextView textAppLabel = (TextView) convertView.findViewById(R.id.appbenri_text_app_label);
+        textAppLabel.setText(client.getLabel());
         
         TextView textActivityName = (TextView) convertView.findViewById(R.id.appbenri_text_app_activity);
-        if (mVisibilityFlags != null && mVisibilityFlags.get(R.id.appbenri_check_app_package_name)) {
-            textActivityName.setVisibility(View.VISIBLE);
-            textActivityName.setText(client.getActivityName());
-        } else {
-            textActivityName.setVisibility(View.GONE);
-        }
+        textActivityName.setText(client.getActivityName());
+        
+        TextView textAppPackage = (TextView) convertView.findViewById(R.id.appbenri_text_app_package);
+        textAppPackage.setText(client.getPackageName());
         
         TextView textInstallDate = (TextView) convertView.findViewById(R.id.appbenri_text_app_install_date);
-        if (mVisibilityFlags != null && mVisibilityFlags.get(R.id.appbenri_check_app_install_date)) {
-            textInstallDate.setVisibility(View.VISIBLE);
-            textInstallDate.setText(client.getFirstInstallTime().toString());
-        } else {
-            textInstallDate.setVisibility(View.GONE);
-        }
+        textInstallDate.setText(client.getFirstInstallTime().toString());
+        
+        // いったん、アプリとしての情報は隠す
+        textAppPackage.setVisibility(View.GONE);
+        textInstallDate.setVisibility(View.GONE);
         
         ImageView imageView = (ImageView) convertView.findViewById(R.id.appbenri_imageview_app_icon);
         imageView.setImageDrawable(client.getIcon());
@@ -74,9 +70,5 @@ public class AppListAdapter extends ArrayAdapter<AppActivityModel> {
         });
         
         return convertView;
-    }
-    
-    public void setVisibilityFlags(SparseBooleanArray flags) {
-        mVisibilityFlags = flags;
     }
 }
