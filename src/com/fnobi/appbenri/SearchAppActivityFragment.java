@@ -31,6 +31,7 @@ public class SearchAppActivityFragment extends Fragment implements OnItemSelecte
     private static String[] sActionList = {
             Intent.ACTION_MAIN,
             Intent.ACTION_VIEW,
+            Intent.ACTION_SEND,
             Intent.ACTION_GET_CONTENT
     };
     
@@ -141,6 +142,10 @@ public class SearchAppActivityFragment extends Fragment implements OnItemSelecte
         Activity activity = this.getActivity();
         PackageManager pm = activity.getPackageManager();
         Intent intent = new Intent(action, null);
+        if (action.equals(Intent.ACTION_SEND)) {
+            // TODO: type selector
+            intent.setType("text/plain");
+        }
         List<ResolveInfo> activityInfoList = pm.queryIntentActivities(intent, 0);
         
         List<AppActivityModel> modelList = new ArrayList<AppActivityModel>();
