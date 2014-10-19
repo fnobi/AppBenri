@@ -170,7 +170,7 @@ public class SearchAppActivityFragment extends Fragment implements OnItemSelecte
         return modelList;
     }
     
-    private void setupListView() {
+    public void setupListView() {
         if (mActionFilter == null) {
             return;
         }
